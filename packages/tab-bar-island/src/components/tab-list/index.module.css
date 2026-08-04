@@ -34,77 +34,30 @@
     pointer-events: none;
 }
 
+/*
+ * Перелёт пилюли, деформация формы, пульс панели и squash иконки — пружины и
+ * keyframes из motion, см. hooks/use-pill-animation.ts и physics.ts. Здесь
+ * задаётся только состояние покоя: во время движения width/height/border-radius
+ * трекера и transform фрейма перезаписываются инлайново покадрово.
+ */
 .frame {
     min-width: var(--tab-bar-island-tab-min-size);
     height: 100%;
     position: relative;
     will-change: transform;
-    transition: transform var(--tab-bar-island-animation-time) cubic-bezier(0, 0.9, 0.6, 1);
 }
 
 .tracker {
     border-radius: var(--tab-bar-island-border-radius);
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
     background: var(--color-light-neutral-translucent-200);
-    will-change: transform, width, height;
+    will-change: width, height, border-radius;
 }
 
-/* prettier-ignore */
-@each $phase in 0, 1 {
-    .leading$(phase) {
-        animation: leadingAnim$(phase) var(--tab-bar-island-animation-time) linear;
-    }
-
-    @keyframes leadingAnim$(phase) {
-        0% {
-            width: 125%;
-        }
-
-        80% {
-            height: calc(100% + var(--gap-4) * 2.5);
-            transform: translate(0, -5px);
-        }
-    }
-
-    .trailing$(phase) {
-        animation: trailingAnim$(phase) var(--tab-bar-island-animation-time) linear;
-
-    }
-
-    @keyframes trailingAnim$(phase) {
-        0% {
-            width: 125%;
-            transform: translate(-20%, 0);
-        }
-
-        80% {
-            height: calc(100% + var(--gap-4) * 2.5);
-            transform: translate(0, -5px);
-        }
-    }
-
-    .pulse$(phase) {
-        animation: pulseAnim$(phase) var(--tab-bar-island-animation-time) cubic-bezier(0, 0.9, 0.6, 1);
-    }
-
-    @keyframes pulseAnim$(phase) {
-        50% {
-            transform: scale(1.035);
-        }
-    }
-
-    .icon$(phase) {
-        animation: iconAnim$(phase) var(--tab-bar-island-animation-time) cubic-bezier(0, 0.9, 0.6, 1)
-    }
-
-    @keyframes iconAnim$(phase) {
-        50% {
-            transform: scale(1/1.035);
-        }
-
-        to {
-            transform: scale(1.1);
-        }
-    }
+.icon {
+    transform-origin: center;
 }
